@@ -29,11 +29,11 @@ public class FetchRequest<T: Object> {
         
         self.realmConfiguration = realm.configuration
         
-        let rlmConfiguration: RLMRealmConfiguration = Realm.toRLMConfiguration(realm.configuration)
+        let rlmConfiguration: RLMRealmConfiguration = Realm.toRLMConfiguration(configuration: realm.configuration)
         
         let rlmRealm = try! RLMRealm(configuration: rlmConfiguration)
         
-        self.rbqFetchRequest = RBQFetchRequest(entityName: entityName, inRealm: rlmRealm, predicate: predicate)
+        self.rbqFetchRequest = RBQFetchRequest(entityName: entityName, in: rlmRealm, predicate: predicate)
     }
     
     // MARK: Properties
@@ -115,7 +115,7 @@ public class FetchRequest<T: Object> {
         
         // If we have sort descriptors then use them
         if (self.sortDescriptors.count > 0) {
-            fetchResults = fetchResults.sorted(self.sortDescriptors)
+            fetchResults = fetchResults.sorted(by: self.sortDescriptors)
         }
         
         return fetchResults
@@ -135,7 +135,7 @@ public class FetchRequest<T: Object> {
     public func evaluateObject(object: T) -> Bool {
         
         if let predicate = self.predicate {
-            return predicate.evaluateWithObject(object)
+            return predicate.evaluate(with: object)
         }
         
         return true
